@@ -37,7 +37,7 @@ calc = (
 This is a simple calculator app that uses the build-in eval() function to compute the solution for an equation.
 """
 
-import wasp, fonts
+import wasp, watch
 
 class CalculatorApp():
     NAME = 'Calc'
@@ -100,6 +100,10 @@ class CalculatorApp():
     def display_output(self):
         wasp.watch.drawable.fill(x=2,y=2,w=170,h=40) 
         if (self.output != ""):
+            if (len(self.output) == 19) and (self.output[4] == "."): # Is a datetime
+                date_tuple = tuple(self.output.split("."))
+                watch.rtc.set_localtime(date_tuple)
+                self.output = ""
             if len(self.output) >= 10:
                 wasp.watch.drawable.string(self.output[len(self.output)-9:], 6, 14, width=170)
             else:
@@ -107,7 +111,6 @@ class CalculatorApp():
 
     def calculate(self,s):
         equation = s
-        
         # Normal calculator stuff    
         for i in range(len(s)):
             if (s[i] =="^"):
